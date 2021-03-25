@@ -7,15 +7,15 @@ module.exports = async function(deployer) {
   await deployer.deploy(Token);
   const token = await Token.deployed()
 
-  await deployer.deploy(BBFSwap);
-  const bbfswap = await BBFSwap.deployed()
+  await deployer.deploy(BBFSwap, token.address);
+  const bbfSwap = await BBFSwap.deployed()
 
   //Transfer all tokens to EthSwap(1 Million * 10^18 (18 decimal places) or totalSupply = 1000000 * (10 ** decimals))
   const totalSupply = '1000000000000000000000000'  
-  await token.transfer(bbfswap.address, totalSupply)
+  await token.transfer(bbfSwap.address, totalSupply)
 
   /**
-   * Check balance in truffle console with <balance = await token.balanceOf(bbfswap.address)><balance.toString()> 
-   * Copy the commands from above into the console first, i.e: <token = await Token.deployed()> <bbfswap = await BBFSwap.deployed()>
+   * Check balance in truffle console with <balance = await token.balanceOf(bbfSwap.address)><balance.toString()> 
+   * Copy the commands from above into the console first, i.e: <token = await Token.deployed()> <bbfSwap = await BBFSwap.deployed()>
    */
 };

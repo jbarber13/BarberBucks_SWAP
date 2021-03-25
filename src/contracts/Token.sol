@@ -47,7 +47,7 @@ contract Token {
 		return true;	
 	}
 	
-	//Transfer from
+	//Transfer from - allow contract to spend tokens, i.e. for a sale on the swap app
 	function transferFrom(address _from, address _to, uint256 _value) public returns (bool success){
 		require(_value <= balanceOf[_from]);
 		require(_value <= allowance[_from][msg.sender]);
