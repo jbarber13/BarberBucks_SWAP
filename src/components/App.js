@@ -3,6 +3,7 @@ import './App.css'
 import Token from '../abis/Token.json'
 import BBFSwap from '../abis/BBFSwap.json'
 import Web3 from 'web3'
+import { subscribeToEvents } from '../Interactions'
 import Navbar from './Navbar'
 import Main from './Main'
 
@@ -11,6 +12,7 @@ class App extends Component {
   async componentWillMount() {
     await this.loadWeb3()
     await this.loadBlockchainData()
+    //await subscribeToEvents(this.state.bbfSwap)//delete this?
   }
   async loadBlockchainData() {
 
@@ -43,6 +45,15 @@ class App extends Component {
     } else {
       window.alert('BBFSwap contract not found on the network')
     }
+
+
+
+
+
+
+
+
+
     //loading is done
     this.setState({ loading: false })
   }//loadBlockchainData
@@ -67,10 +78,38 @@ class App extends Component {
     this.setState({ loading: true })
     this.state.bbfSwap.methods
       .buyTokens()
-      .send({ value: etherAmount, from: this.state.account})
-      .on('transactionHash', (hash) => { 
+      .send({ value: etherAmount, from: this.state.account })
+
+      .on('transactionHash', (hash) => {
+
+
+        
+        /**
+          this.state.bbfSwap.events.Sale({fromBlock: 0}, (error, event) => {
+            console.log('event', event.returnValues[0])
+            console.log('error', error)
+
+          })
+         */
+        
+
+
+          
+          this.state.bbfSwap.events.Purchase({fromBlock: 0}, function (error, event) {})
+          .on('data', function (event) {
+            let out = event//.returnValues.amount.toString()
+            //console.log(window.web3.utils.fromWei(out, 'Ether')); // same results as the optional callback above
+            console.log(event.returnValues.amount.toString())
+          })
+          .on('error', console.error);
+
+
+
+
+
+
+        console.log("Buy Tokens Transaction Hash: ", hash)
         this.setState({ loading: false })
-        console.log("Buy Tokens Transaction Hash: ", hash) 
       })
   }
 
@@ -79,12 +118,12 @@ class App extends Component {
     this.setState({ loading: true })
     this.state.token.methods
       .approve(this.state.bbfSwap.address, tokenAmount)
-      .send({from: this.state.account})
-      .on('transactionHash', (hash) => { 
-        console.log("Approve Token Sale Transaction Hash: ", hash) 
+      .send({ from: this.state.account })
+      .on('transactionHash', (ApproveHash) => {
+        console.log("Approve Token Sale Transaction Hash: ", ApproveHash)
 
         this.state.bbfSwap.methods.sellTokens(tokenAmount)
-          .send({from: this.state.account})
+          .send({ from: this.state.account })
           .on('transactionHash', (hash) => {
             console.log("Sell Tokens Transaction Hash: ", hash)
             this.setState({ loading: false })
@@ -112,11 +151,11 @@ class App extends Component {
     if (this.state.loading) {
       content = <p id="loading" className="text-center">Loading...</p>
     } else {
-      content = <Main 
-      userEthBalance={this.state.userEthBalance} 
-      userTokenBalance={this.state.userTokenBalance} 
-      buyTokens={this.buyTokens/**Pass function to Main component*/}
-      sellTokens={this.sellTokens/**Pass function to Main component*/}
+      content = <Main
+        userEthBalance={this.state.userEthBalance}
+        userTokenBalance={this.state.userTokenBalance}
+        buyTokens={this.buyTokens/**Pass function to Main component*/}
+        sellTokens={this.sellTokens/**Pass function to Main component*/}
       />
     }
     return (
