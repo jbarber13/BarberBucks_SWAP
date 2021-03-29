@@ -20,7 +20,9 @@ class Main extends Component {
             <div className="card-body">
                 <form className="mb-3" onSubmit={(event) => {
                     event.preventDefault()
-                    console.log("Purchasing...")
+                    let etherAmount = this.input.value.toString()
+                    etherAmount = window.web3.utils.toWei(etherAmount, 'Ether')
+                    this.props.buyTokens(etherAmount)
                 }}>
                     <div>
                         <label className="float-left"><b>Input</b></label>
