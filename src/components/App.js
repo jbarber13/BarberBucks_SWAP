@@ -62,8 +62,8 @@ class App extends Component {
 
 
 
-  //buy tokens
   buyTokens = (etherAmount) => {
+    console.log("BUY TOKENS")
     this.setState({ loading: true })
     this.state.bbfSwap.methods
       .buyTokens()
@@ -72,6 +72,25 @@ class App extends Component {
         this.setState({ loading: false })
         console.log("Buy Tokens Transaction Hash: ", hash) 
       })
+  }
+
+  sellTokens = (tokenAmount) => {
+    console.log("SELL TOKENS")
+    this.setState({ loading: true })
+    this.state.token.methods
+      .approve(this.state.bbfSwap.address, tokenAmount)
+      .send({from: this.state.account})
+      .on('transactionHash', (hash) => { 
+        console.log("Approve Token Sale Transaction Hash: ", hash) 
+
+        this.state.bbfSwap.methods.sellTokens(tokenAmount)
+          .send({from: this.state.account})
+          .on('transactionHash', (hash) => {
+            console.log("Sell Tokens Transaction Hash: ", hash)
+            this.setState({ loading: false })
+          })//sell Tokens, encapsulated in the approve function   
+
+      })//Approve first, then sell Tokens
   }
 
 
@@ -96,7 +115,8 @@ class App extends Component {
       content = <Main 
       userEthBalance={this.state.userEthBalance} 
       userTokenBalance={this.state.userTokenBalance} 
-      buyTokens={this.buyTokens /**Pass function to Main component*/}
+      buyTokens={this.buyTokens/**Pass function to Main component*/}
+      sellTokens={this.sellTokens/**Pass function to Main component*/}
       />
     }
     return (
