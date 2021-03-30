@@ -10,7 +10,7 @@ class Navbar extends Component {
         data-toggle="tooltip" 
         data-placement="bottom" 
         title="BarberBucks tokens, price is set to a fixed number of ETH, see the Exchange Rate in the app"
-        href="#/"
+        href="https://www.jake-barber.com/#barberbucks-swap"
         >
           BarberBucks Fixed Token Swap
         </a>
