@@ -12,7 +12,7 @@ class Navbar extends Component {
         title="BarberBucks tokens, price is set to a fixed number of ETH, see the Exchange Rate in the app"
         href="https://www.jake-barber.com/#barberbucks-swap"
         >
-          BarberBucks Fixed Token Swap
+          BarberBucks Token Swap
         </a>
         
         <button className="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
