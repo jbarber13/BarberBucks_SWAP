@@ -74,7 +74,7 @@ class SellForm extends Component {
                 </div>                       
             </div>
             <div className="mb-5">
-                <span className="float-left text-muted">Exchange Rate</span>
+                <span className="float-left text-muted">Exchange Rate:&nbsp;</span>
                 <span className="float-left text-muted">100 BBF = 1 ETH</span>
             </div>
             <button type="submit" className="btn btn-primary btn-block btn-lg">SWAP</button>
